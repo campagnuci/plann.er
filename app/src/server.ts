@@ -2,6 +2,8 @@ import cors from '@fastify/cors'
 import fastify from 'fastify'
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
 
+import { env } from './config/env'
+import { errorHandler } from './error-handler'
 import { confirmParticipant } from './routes/confirm-participant'
 import { confirmTrip } from './routes/confirm-trip'
 import { createActivity } from './routes/create-activity'
@@ -17,12 +19,14 @@ import { updateTrip } from './routes/update-trip'
 
 const app = fastify()
 
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
-
 app.register(cors, {
   origin: '*'
 })
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
+
+app.setErrorHandler(errorHandler)
 
 app.register(createTrip)
 app.register(confirmTrip)
@@ -41,6 +45,6 @@ app.register(getLinks)
 
 app.register(createInvite)
 
-app.listen({ port: 3333 }).then(() => {
+app.listen({ port: env.PORT }).then(() => {
   console.log('Server listening on port 3333')
 })
