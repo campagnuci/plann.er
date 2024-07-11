@@ -1,18 +1,23 @@
 {
-  "name": "app",
+  "name": "plann.er-backend-node",
+  "description": "O plann.er é uma aplicação de **planejamento de viagens com amigos**.",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch --env-file .env src/server.ts"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.mjs",
+    "build": "tsup src --format esm",
+    "dev": "tsx watch --env-file .env src/server.ts",
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio"
+  },
   "devDependencies": {
     "@types/node": "^20.14.10",
     "@types/nodemailer": "^6.4.15",
     "prisma": "^5.16.2",
+    "tsup": "^8.1.0",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   },
