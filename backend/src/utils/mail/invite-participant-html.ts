@@ -1,11 +1,6 @@
-interface InviteParticipantHtmlInput {
-  destination: string
-  formattedStartDate: string
-  formattedEndDate: string
-  confirmationLink: string
-}
+import { EmailInput } from './email-input'
 
-export function inviteParticipantHtml ({ destination, formattedStartDate, formattedEndDate, confirmationLink }: InviteParticipantHtmlInput) {
+export function inviteParticipantHtml ({ destination, formattedStartDate, formattedEndDate, confirmationLink }: EmailInput) {
   return `
     <div style="font-family: sans-serif; font-size: 16px; line-height: 1.6">
       <p>Você foi convidado(a) para participar de uma viagem para <strong>${destination}</strong> nas datas de <strong>${formattedStartDate}</strong> até <strong>${formattedEndDate}</strong>.</p>

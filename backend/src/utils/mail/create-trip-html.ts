@@ -1,11 +1,6 @@
-interface CreateTripHtmlInput {
-  destination: string
-  formattedStartDate: string
-  formattedEndDate: string
-  confirmationLink: string
-}
+import { EmailInput } from './email-input'
 
-export function createTripHtml ({ destination, formattedStartDate, formattedEndDate, confirmationLink }: CreateTripHtmlInput) {
+export function createTripHtml ({ destination, formattedStartDate, formattedEndDate, confirmationLink }: EmailInput) {
   return `
     <div style="font-family: sans-serif; font-size: 16px; line-height: 1.6">
       <p>Você solicitou a criação de uma viagem para <strong>${destination}</strong> nas datas de <strong>${formattedStartDate}</strong> até <strong>${formattedEndDate}</strong>.</p>
