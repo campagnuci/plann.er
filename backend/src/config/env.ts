@@ -6,7 +6,7 @@ const envSchema = z.object({
   API_BASE_URL: z.string().url(),
   FRONTEND_BASE_URL: z.string().url(),
   PORT: z.coerce.number().default(3333),
-  MAIL_HOST: z.string().url(),
+  MAIL_HOST: z.string(),
   MAIL_PORT: z.coerce.number().default(587),
   MAIL_SECURE: z.coerce.boolean().default(false),
   MAIL_AUTH_USER: z.string(),
