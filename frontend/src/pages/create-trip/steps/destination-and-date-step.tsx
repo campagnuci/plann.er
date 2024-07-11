@@ -5,6 +5,7 @@ import { DateRange, DayPicker } from 'react-day-picker'
 import "react-day-picker/dist/style.css"
 
 import { Button } from '../../../components/button'
+import { Input } from '../../../components/input'
 
 interface Props {
   isGuestInputOpen: boolean
@@ -32,12 +33,12 @@ export function DestinationAndDateStep ({ isGuestInputOpen, handleCloseGuestInpu
     <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">
       <div className='flex items-center gap-2 flex-1'>
         <MapPin className='size-5 text-zinc-400' />
-        <input
+        <Input
           disabled={isGuestInputOpen}
           onChange={(event) => setDestination(event.target.value)}
-          className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
           type="text"
           placeholder="Para onde você vai?"
+          textSize='lg'
         />
       </div>
       <button

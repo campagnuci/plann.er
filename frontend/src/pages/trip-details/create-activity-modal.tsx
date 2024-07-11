@@ -3,6 +3,7 @@ import { FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button } from '../../components/button'
 import { api } from '../../lib/axios'
+import { Input } from '../../components/input'
 
 interface Props {
   handleCloseCreateActivityModal: () => void
@@ -42,19 +43,14 @@ export function CreateActivityModal ({ handleCloseCreateActivityModal }: Props) 
         <form onSubmit={createActivity} className='space-y-3'>
           <div className='h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2'>
             <Tag className='size-5 text-zinc-400' />
-            <input
-              type="text"
-              name="title"
-              className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
-              placeholder="Qual a atividade"
-            />
+            <Input type="text" name="title" placeholder="Qual a atividade" />
           </div>
           <div className='h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex flex-1 items-center gap-2'>
             <Calendar className='size-5 text-zinc-400' />
-            <input
+            <Input
               type="datetime-local"
               name="occursAt"
-              className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1 [color-scheme:dark]"
+              colorScheme="dark"
               placeholder="Data e horário da atividade"
             />
           </div>
