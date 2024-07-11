@@ -31,8 +31,8 @@ O deploy da aplicação pode ser acessada através da seguinte URL base:
 Antes de baixar o projeto é necessário ter as seguintes ferramentas já instaladas:
 
 * [Git](https://git-scm.com)
-* [NodeJS](https://nodejs.org/en/)
-* [NPM](https://www.npmjs.com/), [PNPM](https://pnpm.io/pt/) ou [Yarn](https://yarnpkg.com/)
+* [Node.js](https://nodejs.org/en/)
+* [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/pt/) ou [yarn](https://yarnpkg.com/)
 
 Utilize uma ferramenta como [Postman](https://www.postman.com/), ou outra similar, para testar as rotas da aplicação sem o frontend.
 
@@ -77,7 +77,7 @@ $ npm run dev
 
 ### Documentação
 
-Após o servidor backend estar rodando, é possível acessar ele através da rota `/docs` na aplicação. Caso tenha utilizado a porta padrão (3333), o endereço será: `http://localhost:3333/docs`
+Após o servidor backend estar rodando, é possível acessar ele através da rota `/docs` na aplicação. Caso tenha utilizado a porta padrão, `3333`, o endereço será: `http://localhost:3333/docs`
 
 ## 🛠 Tecnologias
 
@@ -100,4 +100,4 @@ As seguintes libs foram usadas na construção do projeto:
 - **[LucideReact](https://lucide.dev/guide/packages/lucide-react)**
 - **[Axios](https://axios-http.com/)**
 
-> Para mais detalhes das dependências gerais da aplicação veja os arquivos de cada componente [package.json](./backend/package.json) e [package.json](./frontend/package.json)
+> Para mais detalhes das dependências gerais da aplicação veja os arquivos de cada componente da aplicação [backend](./backend/package.json) e [frontend](./frontend/package.json)
