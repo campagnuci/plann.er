@@ -6,7 +6,7 @@ import { ClientError } from '../errors/client-error'
 import { prisma } from '../lib/prisma'
 
 export async function getTripDetails (app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().get('/trips/:tripId/', {
+  app.withTypeProvider<ZodTypeProvider>().get('/trips/:tripId', {
     schema: {
       params: z.object({
         tripId: z.string().uuid(),

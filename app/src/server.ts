@@ -30,20 +30,16 @@ app.setErrorHandler(errorHandler)
 
 app.register(createTrip)
 app.register(confirmTrip)
-app.register(updateTrip)
-app.register(getTripDetails)
-
 app.register(confirmParticipant)
-app.register(getParticipants)
-app.register(getParticipant)
-
 app.register(createActivity)
 app.register(getActivities)
-
 app.register(createLink)
 app.register(getLinks)
-
+app.register(getParticipants)
 app.register(createInvite)
+app.register(updateTrip)
+app.register(getTripDetails)
+app.register(getParticipant)
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('Server listening on port 3333')
