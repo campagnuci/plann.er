@@ -16,7 +16,7 @@
 
 Este é o repositório do **Plann.er**, que é um sistema de planejamento de viagens, onde é possível montar planos de viagens com amigos. É possível cadastrar atividades, adicionar links úteis sobre a viagem, entre outras funcionalidades.
 
-Essa aplicação foi desenvolvida durante o evento **Next Level Week Journey** da [Rocketseat](https://www.rocketseat.com.br/) utilizando principalmente tecnologias como `Node`, `TypeScript` e `Fastify`.
+Essa aplicação foi desenvolvida durante o evento **Next Level Week Journey** da [Rocketseat](https://www.rocketseat.com.br/) utilizando principalmente tecnologias como `Node`, `TypeScript`, `Fastify` e `React`.
 
 
 <!--
