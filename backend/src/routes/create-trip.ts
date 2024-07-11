@@ -8,6 +8,8 @@ import { ClientError } from '../errors/client-error'
 import { dayjs } from '../lib/dayjs'
 import { getMailClient } from '../lib/mailer'
 import { prisma } from '../lib/prisma'
+import { createTripHtml } from '../utils/mail/create-trip-html'
+import { from } from '../utils/mail/from'
 
 export async function createTrip (app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post('/trips', {
@@ -58,29 +60,16 @@ export async function createTrip (app: FastifyInstance) {
     const formattedStartDate = dayjs(startsAt).format('LL')
     const formattedEndDate = dayjs(endsAt).format('LL')
     const confirmationLink = `${env.API_BASE_URL}/trips/${trip.id}/confirm`
-    const mail = await getMailClient()
 
+    const mail = await getMailClient()
     const message = await mail.sendMail({
-      from: {
-        name: 'Equipe plann.er',
-        address: 'noreply@plann.er'
-      },
+      from,
       to: {
         name: ownerName,
         address: ownerEmail,
       },
       subject: `Confirme sua viagem para ${destination} em ${formattedStartDate}`,
-      html: `
-        <div style="font-family: sans-serif; font-size: 16px; line-height: 1.6">
-          <p>Você solicitou a criação de uma viagem para <strong>${destination}</strong> nas datas de <strong>${formattedStartDate}</strong> até <strong>${formattedEndDate}</strong>.</p>
-          <p></p>
-          <p>Para confirmar sua viagem, clique no link abaixo:</p>
-          <p></p>
-          <p><a href="${confirmationLink}">Confirmar Viagem</a></p>
-          <p></p>
-          <p>Caso você não saiba do que se trata esse e-mail, apenas ignore esse e-mail.</p>
-        </div>
-      `.trim()
+      html: createTripHtml({ destination: trip.destination, formattedStartDate, formattedEndDate, confirmationLink })
     })
 
     console.log(nodemailer.getTestMessageUrl(message))
