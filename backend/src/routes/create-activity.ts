@@ -7,46 +7,59 @@ import { dayjs } from '../lib/dayjs'
 import { prisma } from '../lib/prisma'
 
 export async function createActivity (app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post('/trips/:tripId/activities', {
-    schema: {
-      body: z.object({
-        title: z.string().min(4),
-        occursAt: z.coerce.date(),
-      }),
-      params: z.object({
-        tripId: z.string().uuid(),
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .post('/trips/:tripId/activities', {
+      schema: {
+        summary: 'Create Activity',
+        tags: ['activities'],
+        body: z.object({
+          title: z.string().min(4),
+          occursAt: z.coerce.date(),
+        }),
+        params: z.object({
+          tripId: z.string().uuid(),
+        }),
+        response: {
+          200: z.object({
+            activityId: z.string().uuid()
+          }),
+          400: z.object({
+            message: z.string(),
+            errors: z.record(z.array(z.string()))
+          })
+        }
+      }
+    }, async (request) => {
+      const { tripId } = request.params
+      const { title, occursAt } = request.body
+
+      const trip = await prisma.trip.findUnique({
+        where: {
+          id: tripId
+        }
       })
-    }
-  }, async (request) => {
-    const { tripId } = request.params
-    const { title, occursAt } = request.body
 
-    const trip = await prisma.trip.findUnique({
-      where: {
-        id: tripId
+      if (!trip) {
+        throw new ClientError('Trip not found.')
       }
-    })
 
-    if (!trip) {
-      throw new ClientError('Trip not found.')
-    }
-
-    if (dayjs(occursAt).isBefore(trip.startsAt)) {
-      throw new ClientError('Invalid activity date.')
-    }
-
-    if (dayjs(occursAt).isAfter(trip.endsAt)) {
-      throw new ClientError('Invalid activity date.')
-    }
-
-    const activity = await prisma.activity.create({
-      data: {
-        title,
-        occursAt,
-        tripId
+      if (dayjs(occursAt).isBefore(trip.startsAt)) {
+        throw new ClientError('Invalid activity date.')
       }
-    })
 
-    return { activityId: activity.id }
-  })
+      if (dayjs(occursAt).isAfter(trip.endsAt)) {
+        throw new ClientError('Invalid activity date.')
+      }
+
+      const activity = await prisma.activity.create({
+        data: {
+          title,
+          occursAt,
+          tripId
+        }
+      })
+
+      return { activityId: activity.id }
+    })
 }

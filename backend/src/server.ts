@@ -1,6 +1,8 @@
 import cors from '@fastify/cors'
+import fastifySwagger from "@fastify/swagger"
+import fastifySwaggerUI from "@fastify/swagger-ui"
 import fastify from 'fastify'
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
 
 import { env } from './config/env'
 import { errorHandler } from './error-handler'
@@ -23,6 +25,23 @@ app.register(cors, {
   origin: '*'
 })
 
+app.register(fastifySwagger, {
+  swagger: {
+    consumes: ['application/json'],
+    produces: ['application/json'],
+    info: {
+      title: 'plann.er',
+      description: 'Especificações da API para o back-end da aplicação plann.er construída durante o NLW Journey da Rocketseat.',
+      version: '1.0.0'
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+app.register(fastifySwaggerUI, {
+  routePrefix: '/docs',
+})
+
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
@@ -41,6 +60,6 @@ app.register(updateTrip)
 app.register(getTripDetails)
 app.register(getParticipant)
 
-app.listen({ port: env.PORT }).then(() => {
-  console.log('Server listening on port 3333')
+app.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
+  console.log(`Server listening on port ${env.PORT}`)
 })

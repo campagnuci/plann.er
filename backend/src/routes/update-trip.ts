@@ -9,6 +9,8 @@ import { prisma } from '../lib/prisma'
 export async function updateTrip (app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put('/trips/:tripId', {
     schema: {
+      summary: 'Update Trip',
+      tags: ['trips'],
       body: z.object({
         destination: z.string().min(4),
         startsAt: z.coerce.date(),
@@ -16,7 +18,16 @@ export async function updateTrip (app: FastifyInstance) {
       }),
       params: z.object({
         tripId: z.string().uuid()
-      })
+      }),
+      response: {
+        200: z.object({
+          tripId: z.string().uuid()
+        }),
+        400: z.object({
+          message: z.string(),
+          errors: z.record(z.array(z.string()))
+        })
+      }
     }
   }, async (request) => {
     const { tripId } = request.params

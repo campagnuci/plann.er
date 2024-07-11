@@ -7,34 +7,45 @@ import { ClientError } from '../errors/client-error'
 import { prisma } from '../lib/prisma'
 
 export async function confirmParticipant (app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().get('/participants/:participantId/confirm', {
-    schema: {
-      params: z.object({
-        participantId: z.string().uuid(),
-      })
-    }
-  }, async (request, reply) => {
-    const { participantId } = request.params
-
-    const participant = await prisma.participant.findUnique({
-      where: {
-        id: participantId,
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .get('/participants/:participantId/confirm', {
+      schema: {
+        summary: 'Confirm Participant',
+        tags: ['participants'],
+        params: z.object({
+          participantId: z.string().uuid(),
+        }),
+        response: {
+          302: z.null(),
+          400: z.object({
+            message: z.string(),
+            errors: z.record(z.array(z.string()))
+          })
+        }
       }
-    })
+    }, async (request, reply) => {
+      const { participantId } = request.params
 
-    if (!participant) {
-      throw new ClientError('Participant not found.')
-    }
+      const participant = await prisma.participant.findUnique({
+        where: {
+          id: participantId,
+        }
+      })
 
-    if (participant.isConfirmed) {
+      if (!participant) {
+        throw new ClientError('Participant not found.')
+      }
+
+      if (participant.isConfirmed) {
+        return reply.redirect(`${env.FRONTEND_BASE_URL}/trips/${participant.tripId}`)
+      }
+
+      await prisma.participant.update({
+        where: { id: participantId },
+        data: { isConfirmed: true },
+      })
+
       return reply.redirect(`${env.FRONTEND_BASE_URL}/trips/${participant.tripId}`)
-    }
-
-    await prisma.participant.update({
-      where: { id: participantId },
-      data: { isConfirmed: true },
     })
-
-    return reply.redirect(`${env.FRONTEND_BASE_URL}/trips/${participant.tripId}`)
-  })
 }

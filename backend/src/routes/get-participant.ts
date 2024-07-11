@@ -8,9 +8,25 @@ import { prisma } from '../lib/prisma'
 export async function getParticipant (app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get('/participants/:participantId', {
     schema: {
+      summary: 'Get Participants',
+      tags: ['participants'],
       params: z.object({
         participantId: z.string().uuid(),
-      })
+      }),
+      response: {
+        200: z.object({
+          participant: z.object({
+            id: z.string().uuid(),
+            email: z.string().email(),
+            name: z.string().nullable(),
+            isConfirmed: z.boolean(),
+          })
+        }),
+        400: z.object({
+          message: z.string(),
+          errors: z.record(z.array(z.string()))
+        })
+      }
     }
   }, async (request) => {
     const { participantId } = request.params

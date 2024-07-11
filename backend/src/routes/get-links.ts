@@ -8,9 +8,25 @@ import { prisma } from '../lib/prisma'
 export async function getLinks (app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get('/trips/:tripId/links', {
     schema: {
+      summary: 'Get Links',
+      tags: ['links'],
       params: z.object({
         tripId: z.string().uuid(),
-      })
+      }),
+      response: {
+        200: z.object({
+          links: z.array(z.object({
+            id: z.string().uuid(),
+            title: z.string(),
+            url: z.string(),
+            tripId: z.string().uuid(),
+          }))
+        }),
+        400: z.object({
+          message: z.string(),
+          errors: z.record(z.array(z.string()))
+        })
+      }
     }
   }, async (request) => {
     const { tripId } = request.params
