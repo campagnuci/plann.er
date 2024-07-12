@@ -1,26 +1,32 @@
 import { Mail, User } from 'lucide-react'
 import { FormEvent } from 'react'
+import { DateRange } from 'react-day-picker'
 
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
+import { format } from 'date-fns'
 
 interface Props {
   handleCloseModal: () => void
   handleCreateTrip: (event: FormEvent<HTMLFormElement>) => void
   setOwnerName: (name: string) => void
   setOwnerEmail: (email: string) => void
+  destination: string
+  selectedDate: DateRange | undefined
 }
 
-export function ConfirmTripModal ({ handleCloseModal, handleCreateTrip, setOwnerName, setOwnerEmail }: Props) {
+export function ConfirmTripModal ({ handleCloseModal, handleCreateTrip, setOwnerName, setOwnerEmail, destination, selectedDate }: Props) {
+  const displayedDate = selectedDate && selectedDate.from && selectedDate.to ? format(selectedDate.from, "d' de 'LLL").concat(' até ').concat(format(selectedDate.to, "d' de 'LLL")) : null
+
   return (
     <Modal
       title='Confirmar criação de viagem'
       subText={
         <>
           Para concluir a criação da viagem para
-          <span className='text-zinc-100 font-semibold'>Florianópolis, Brasil</span> nas datas de
-          <span className='text-zinc-100 font-semibold'>16 a 27 de Agosto de 2024</span> preencha seus dados abaixo:
+          <span className='text-zinc-100 font-semibold'>{` ${destination} `}</span>nas datas de
+          <span className='text-zinc-100 font-semibold'>{` ${displayedDate} `}</span>preencha seus dados abaixo:
         </>
       }
       closeButtonAction={handleCloseModal}

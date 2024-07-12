@@ -146,6 +146,8 @@ export function CreateTripPage () {
             handleCreateTrip={handleCreateTrip}
             setOwnerName={setOwnerName}
             setOwnerEmail={setOwnerEmail}
+            destination={destination}
+            selectedDate={eventStartAndEndDates}
           />
         )
       }
