@@ -19,11 +19,11 @@ const buttonVariants = tv({
   }
 })
 
-interface Props extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
+interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
   children: ReactNode
 }
 
-export function Button ({ children, variant, size, ...props }: Props) {
+export function Button ({ children, variant, size, ...props }: ButtonProps) {
   return (
     <button className={buttonVariants({ variant, size })} {...props}>
       {children}

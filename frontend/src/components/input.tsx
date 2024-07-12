@@ -27,6 +27,6 @@ const inputVariants = tv({
 
 interface InputProps extends ComponentProps<'input'>, VariantProps<typeof inputVariants> {}
 
-export function Input({ textSize, colorScheme, extent, ...props }: InputProps) {
+export function Input ({ textSize, colorScheme, extent, ...props }: InputProps) {
   return <input {...props} className={inputVariants({ textSize, extent, colorScheme })} />
 }
