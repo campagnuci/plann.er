@@ -22,10 +22,6 @@ export async function getParticipants (app: FastifyInstance) {
             email: z.string().email(),
           }))
         }),
-        400: z.object({
-          message: z.string(),
-          errors: z.record(z.array(z.string()))
-        })
       }
     }
   }, async (request) => {

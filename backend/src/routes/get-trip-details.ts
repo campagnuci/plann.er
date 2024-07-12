@@ -23,10 +23,6 @@ export async function getTripDetails (app: FastifyInstance) {
             isConfirmed: z.boolean(),
           })
         }),
-        400: z.object({
-          message: z.string(),
-          errors: z.record(z.array(z.string()))
-        })
       }
     }
   }, async (request) => {

@@ -24,10 +24,6 @@ export async function createActivity (app: FastifyInstance) {
           200: z.object({
             activityId: z.string().uuid()
           }),
-          400: z.object({
-            message: z.string(),
-            errors: z.record(z.array(z.string()))
-          })
         }
       }
     }, async (request) => {

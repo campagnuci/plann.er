@@ -20,18 +20,14 @@ export async function getActivities (app: FastifyInstance) {
           200: z.object({
             activities: z.array(z.object({
               date: z.date(),
-              activities: z.object({
+              activities: z.array(z.object({
                 id: z.string().uuid(),
                 title: z.string(),
                 occursAt: z.date(),
                 tripId: z.string().uuid(),
-              }).array(),
+              })),
             }))
           }),
-          400: z.object({
-            message: z.string(),
-            errors: z.record(z.array(z.string()))
-          })
         }
       }
     }, async (request) => {

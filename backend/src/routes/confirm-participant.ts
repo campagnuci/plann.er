@@ -18,10 +18,6 @@ export async function confirmParticipant (app: FastifyInstance) {
         }),
         response: {
           302: z.null(),
-          400: z.object({
-            message: z.string(),
-            errors: z.record(z.array(z.string()))
-          })
         }
       }
     }, async (request, reply) => {

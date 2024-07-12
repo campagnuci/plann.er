@@ -29,10 +29,6 @@ export async function createTrip (app: FastifyInstance) {
         response: {
           200: z.object({
             tripId: z.string().uuid()
-          }),
-          400: z.object({
-            message: z.string(),
-            errors: z.record(z.array(z.string()))
           })
         }
       }

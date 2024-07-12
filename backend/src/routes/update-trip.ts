@@ -23,10 +23,6 @@ export async function updateTrip (app: FastifyInstance) {
         200: z.object({
           tripId: z.string().uuid()
         }),
-        400: z.object({
-          message: z.string(),
-          errors: z.record(z.array(z.string()))
-        })
       }
     }
   }, async (request) => {

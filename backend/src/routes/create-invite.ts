@@ -28,10 +28,6 @@ export async function createInvite (app: FastifyInstance) {
           200: z.object({
             participantId: z.string().uuid()
           }),
-          400: z.object({
-            message: z.string(),
-            errors: z.record(z.array(z.string()))
-          })
         }
       }
     }, async (request) => {

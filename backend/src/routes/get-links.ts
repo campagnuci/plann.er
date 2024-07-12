@@ -22,10 +22,6 @@ export async function getLinks (app: FastifyInstance) {
             tripId: z.string().uuid(),
           }))
         }),
-        400: z.object({
-          message: z.string(),
-          errors: z.record(z.array(z.string()))
-        })
       }
     }
   }, async (request) => {
