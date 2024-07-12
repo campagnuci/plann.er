@@ -63,7 +63,6 @@ export function CreateTripPage () {
       return
     }
 
-
     const { data } = await api.post('/trips', {
       destination,
       startsAt: eventStartAndEndDates.from,
@@ -74,7 +73,7 @@ export function CreateTripPage () {
     })
     const { tripId } = data
 
-    navigate(`/trip/${tripId}'`)
+    navigate(`/trip/${tripId}`)
   }
 
   function addNewEmailToInvite (event: FormEvent<HTMLFormElement>) {
