@@ -1,9 +1,9 @@
 import { Mail, User } from 'lucide-react'
 import { FormEvent } from 'react'
 
-import { Button } from '../../components/button'
-import { Input } from '../../components/input'
-import { Modal } from '../../components/modal'
+import { Button } from '@/components/button'
+import { Input } from '@/components/input'
+import { Modal } from '@/components/modal'
 
 interface Props {
   handleCloseModal: () => void

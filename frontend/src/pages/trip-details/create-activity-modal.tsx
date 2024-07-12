@@ -2,10 +2,10 @@ import { Calendar, Tag } from 'lucide-react'
 import { FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Button } from '../../components/button'
-import { Input } from '../../components/input'
-import { Modal } from '../../components/modal'
-import { api } from '../../lib/axios'
+import { Button } from '@/components/button'
+import { Input } from '@/components/input'
+import { Modal } from '@/components/modal'
+import { api } from '@/lib/axios'
 
 interface Props {
   handleCloseCreateActivityModal: () => void

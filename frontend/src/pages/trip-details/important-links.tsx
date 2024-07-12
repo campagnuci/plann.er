@@ -2,8 +2,8 @@ import { Link2, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Button } from '../../components/button'
-import { api } from '../../lib/axios'
+import { Button } from '@/components/button'
+import { api } from '@/lib/axios'
 
 interface Link {
   id: string

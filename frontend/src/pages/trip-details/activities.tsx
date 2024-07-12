@@ -4,7 +4,7 @@ import { CircleCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { api } from '../../lib/axios'
+import { api } from '@/lib/axios'
 
 interface Activity {
   date: string

@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
+
 import { Activities } from './activities'
 import { CreateActivityModal } from './create-activity-modal'
 import { DestinationAndDateHeader } from './destination-and-date-header'

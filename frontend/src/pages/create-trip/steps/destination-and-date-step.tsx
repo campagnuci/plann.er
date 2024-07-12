@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { DateRange, DayPicker } from 'react-day-picker'
 import "react-day-picker/dist/style.css"
 
-import { Button } from '../../../components/button'
-import { Input } from '../../../components/input'
-import { Modal } from '../../../components/modal'
+import { Button } from '@/components/button'
+import { Input } from '@/components/input'
+import { Modal } from '@/components/modal'
 
 interface Props {
   isGuestInputOpen: boolean
