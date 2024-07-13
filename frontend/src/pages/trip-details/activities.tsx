@@ -19,6 +19,12 @@ export function Activities () {
   const { tripId } = useParams()
   const [activities, setActivities] = useState<Activity[]>([])
 
+  function humanizeWeekDay (date: string) {
+    const formatted = format(date, 'EEEE', { locale: ptBR })
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+
+  }
+
   useEffect(() => {
     api.get(`/trips/${tripId}/activities`).then(response => setActivities(response.data.activities))
   }, [tripId])
@@ -30,7 +36,7 @@ export function Activities () {
           <div key={occurrence.date} className="space-y-2.5">
             <div className="flex gap-2 items-baseline">
               <span className="text-xl text-zinc-300 font-semibold">Dia {format(occurrence.date, 'd')}</span>
-              <span className="text-xs text-zinc-500">{format(occurrence.date, 'EEEE', { locale: ptBR })}</span>
+              <span className="text-xs text-zinc-500">{humanizeWeekDay(occurrence.date)}</span>
             </div>
             {
               occurrence.activities.length > 0 ? (

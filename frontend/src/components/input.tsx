@@ -11,6 +11,7 @@ const inputVariants = tv({
     extent: {
       sm: 'w-40',
       default: 'flex-1',
+      xl: 'w-[500px]',
     },
     colorScheme: {
       white: '',

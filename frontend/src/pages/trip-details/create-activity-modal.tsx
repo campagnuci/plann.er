@@ -26,7 +26,8 @@ export function CreateActivityModal ({ handleCloseCreateActivityModal }: Props) 
       occursAt,
     })
 
-    handleCloseCreateActivityModal()
+    // handleCloseCreateActivityModal()
+    window.document.location.reload()
   }
 
   return (

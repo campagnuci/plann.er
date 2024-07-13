@@ -5,6 +5,9 @@ import { useParams } from 'react-router-dom'
 
 import { Button } from '@/components/button'
 import { api } from '@/lib/axios'
+import { Input } from '@/components/input'
+import { Modal } from '@/components/modal'
+import { DateRange, DayPicker } from 'react-day-picker'
 
 export interface Trip {
   id: string
@@ -16,31 +19,109 @@ export interface Trip {
 
 export function DestinationAndDateHeader () {
   const { tripId } = useParams()
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [trip, setTrip] = useState<Trip>()
+  const [newDestination, setNewDestination] = useState('')
+  const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>(undefined)
 
   const displayedDate = trip ? format(trip.startsAt, "d' de 'LLL").concat(' até ').concat(format(trip.endsAt, "d' de 'LLL")) : null
+  const newDisplayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to ? format(eventStartAndEndDates.from, "d' de 'LLL").concat(' até ').concat(format(eventStartAndEndDates.to, "d' de 'LLL")) : null
+
+  function enableDestinationAndDateEditing () {
+    setIsEditing(true)
+  }
+
+  function openDatePicker () {
+    setIsDatePickerOpen(true)
+  }
+
+  function closeDatePicker () {
+    setIsDatePickerOpen(false)
+  }
+
+  async function editTrip () {
+    if (!newDestination) {
+      return
+    }
+    if (!eventStartAndEndDates?.from || !eventStartAndEndDates?.to) {
+      return
+    }
+    await api.put(`/trips/${tripId}`, {
+      destination: newDestination,
+      startsAt: eventStartAndEndDates.from,
+      endsAt: eventStartAndEndDates.to,
+    })
+    setIsEditing(false)
+    window.document.location.reload()
+  }
 
   useEffect(() => {
-    api.get(`/trips/${tripId}`).then(response => setTrip(response.data.trip))
-  }, [tripId])
+    async function getTrip () {
+      const { data } = await api.get(`/trips/${tripId}`)
+      setTrip(data.trip)
+    }
+    if (!trip) {
+      getTrip()
+    }
+    setEventStartAndEndDates({
+      from: trip && new Date(trip.startsAt),
+      to: trip && new Date(trip.endsAt)
+    })
+  }, [tripId, trip])
 
   return (
     <div className="px-4 h-16 rounded-xl bg-zinc-900 shadow-shape flex items-center justify-between">
       <div className="flex items-center gap-2">
         <MapPin className="size-5 text-zinc-400" />
-        <span className="text-lg text-zinc-100">{trip?.destination}</span>
+        <Input
+          disabled={!isEditing}
+          onChange={(event) => setNewDestination(event.target.value)}
+          type="text"
+          textSize='lg'
+          extent='xl'
+          value={newDestination.length > 0 ? newDestination : (trip?.destination ?? '')}
+        />
       </div>
       <div className="flex items-center gap-5">
-        <div className="flex items-center gap-2">
-          <Calendar className="size-5 text-zinc-400" />
-          <span className="text-zinc-100">{displayedDate}</span>
-        </div>
+        <button
+          onClick={openDatePicker}
+          disabled={!isEditing}
+          className='flex items-center gap-2 text-left w-[240px]'
+        >
+          <Calendar className='size-5 text-zinc-400' />
+          <span className="text-lg text-zinc-400 w-40 flex-1">
+            {newDisplayedDate ? newDisplayedDate : displayedDate}
+          </span>
+        </button>
         <div className='w-px h-6 bg-zinc-800' />
-        <Button variant='secondary'>
-          Alterar local e data
-          <Settings2 className='size-5 text-zinc-200' />
-        </Button>
+        {
+          isEditing ? (
+            <Button onClick={editTrip}>
+              Salvar alterações
+              <Settings2 className='size-5 text-zinc-800' />
+            </Button>
+          ) : (
+            <Button onClick={enableDestinationAndDateEditing} variant='secondary'>
+              Alterar local e data
+              <Settings2 className='size-5 text-zinc-200' />
+            </Button>
+          )
+        }
       </div>
+      { isDatePickerOpen && (
+        <Modal
+          title='Selecione a data'
+          size='sm'
+          closeButtonAction={closeDatePicker}
+        >
+          <DayPicker
+            mode="range"
+            selected={eventStartAndEndDates}
+            onSelect={setEventStartAndEndDates}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
