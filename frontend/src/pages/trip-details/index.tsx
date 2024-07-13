@@ -6,6 +6,7 @@ import { CreateActivityModal } from './create-activity-modal'
 import { DestinationAndDateHeader } from './destination-and-date-header'
 import { Guests } from './guests'
 import { ImportantLinks } from './important-links'
+import { DeleteTrip } from './delete-trip'
 
 export function TripDetailsPage () {
   const [isCreateActivityModalOpen, setIsCreateActivityModalOpen] = useState(false)
@@ -37,6 +38,8 @@ export function TripDetailsPage () {
           <ImportantLinks />
           <div className='h-px w-full bg-zinc-800' />
           <Guests />
+          <div className='h-px w-full bg-zinc-800' />
+          <DeleteTrip />
         </div>
       </main>
 
