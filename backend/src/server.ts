@@ -12,6 +12,7 @@ import { createActivity } from './routes/create-activity'
 import { createInvite } from './routes/create-invite'
 import { createLink } from './routes/create-link'
 import { createTrip } from './routes/create-trip'
+import { deleteTrip } from './routes/delete-trip'
 import { getActivities } from './routes/get-activities'
 import { getLinks } from './routes/get-links'
 import { getParticipant } from './routes/get-participant'
@@ -59,6 +60,7 @@ app.register(createInvite)
 app.register(updateTrip)
 app.register(getTripDetails)
 app.register(getParticipant)
+app.register(deleteTrip)
 
 app.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
   console.log(`Server listening on port ${env.PORT}`)
