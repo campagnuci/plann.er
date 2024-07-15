@@ -1,10 +1,10 @@
 import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
 import { CircleCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { api } from '@/lib/axios'
+import { humanizeWeekDay } from '@/utils/humanize-week-day'
 
 interface Activity {
   date: string
@@ -18,12 +18,6 @@ interface Activity {
 export function Activities () {
   const { tripId } = useParams()
   const [activities, setActivities] = useState<Activity[]>([])
-
-  function humanizeWeekDay (date: string) {
-    const formatted = format(date, 'EEEE', { locale: ptBR })
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-
-  }
 
   useEffect(() => {
     api.get(`/trips/${tripId}/activities`).then(response => setActivities(response.data.activities))

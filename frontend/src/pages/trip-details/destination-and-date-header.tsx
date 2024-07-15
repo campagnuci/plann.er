@@ -1,13 +1,13 @@
-import { format } from 'date-fns'
 import { Calendar, MapPin, Settings2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { DateRange, DayPicker } from 'react-day-picker'
 import { useParams } from 'react-router-dom'
 
 import { Button } from '@/components/button'
-import { api } from '@/lib/axios'
 import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
-import { DateRange, DayPicker } from 'react-day-picker'
+import { api } from '@/lib/axios'
+import { mergeDatesToString } from '@/utils/merge-dates-to-string'
 
 export interface Trip {
   id: string
@@ -25,8 +25,8 @@ export function DestinationAndDateHeader () {
   const [newDestination, setNewDestination] = useState('')
   const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>(undefined)
 
-  const displayedDate = trip ? format(trip.startsAt, "d' de 'LLL").concat(' até ').concat(format(trip.endsAt, "d' de 'LLL")) : null
-  const newDisplayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to ? format(eventStartAndEndDates.from, "d' de 'LLL").concat(' até ').concat(format(eventStartAndEndDates.to, "d' de 'LLL")) : null
+  const displayedDate = trip ? mergeDatesToString({ from: trip?.startsAt, to: trip?.endsAt }) : null
+  const newDisplayedDate = eventStartAndEndDates ? mergeDatesToString(eventStartAndEndDates) : null
 
   function enableDestinationAndDateEditing () {
     setIsEditing(true)

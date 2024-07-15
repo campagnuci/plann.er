@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import { ArrowRight, Calendar, MapPin, Settings2 } from 'lucide-react'
 import { useState } from 'react'
 import { DateRange, DayPicker } from 'react-day-picker'
@@ -7,6 +6,7 @@ import "react-day-picker/dist/style.css"
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
+import { mergeDatesToString } from '@/utils/merge-dates-to-string'
 
 interface Props {
   isGuestInputOpen: boolean
@@ -28,7 +28,7 @@ export function DestinationAndDateStep ({ isGuestInputOpen, handleCloseGuestInpu
     setIsDatePickerOpen(false)
   }
 
-  const displayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to ? format(eventStartAndEndDates.from, "d' de 'LLL").concat(' até ').concat(format(eventStartAndEndDates.to, "d' de 'LLL")) : null
+  const displayedDate = eventStartAndEndDates ? mergeDatesToString(eventStartAndEndDates) : null
 
   return (
     <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">

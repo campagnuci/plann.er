@@ -5,7 +5,7 @@ import { DateRange } from 'react-day-picker'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
-import { format } from 'date-fns'
+import { mergeDatesToString } from '@/utils/merge-dates-to-string'
 
 interface Props {
   handleCloseModal: () => void
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function ConfirmTripModal ({ handleCloseModal, handleCreateTrip, setOwnerName, setOwnerEmail, destination, selectedDate }: Props) {
-  const displayedDate = selectedDate && selectedDate.from && selectedDate.to ? format(selectedDate.from, "d' de 'LLL").concat(' até ').concat(format(selectedDate.to, "d' de 'LLL")) : null
+  const displayedDate = selectedDate ? mergeDatesToString(selectedDate) : null
 
   return (
     <Modal
