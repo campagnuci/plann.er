@@ -1,3 +1,4 @@
+import { isEqual } from 'date-fns'
 import { Calendar, MapPin, Settings2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { DateRange, DayPicker } from 'react-day-picker'
@@ -41,6 +42,11 @@ export function DestinationAndDateHeader () {
   }
 
   async function editTrip () {
+    const areStartDatesEqual = isEqual(eventStartAndEndDates?.from as Date, trip?.startsAt as string)
+    const areEndDatesEqual = isEqual(eventStartAndEndDates?.to as Date, trip?.endsAt as string)
+    if (newDestination === '' && areStartDatesEqual && areEndDatesEqual) {
+      setIsEditing(false)
+    }
     if (!newDestination) {
       return
     }
