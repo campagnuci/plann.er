@@ -1,9 +1,10 @@
-import { CheckCircle2, CircleDashed, UserCog } from 'lucide-react'
+import { CheckCircle2, CircleDashed, UserPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Button } from '@/components/button'
 import { api } from '@/lib/axios'
+import { InviteGuestModal } from './invite-guest-modal'
 
 interface Participant {
   id: string
@@ -15,6 +16,15 @@ interface Participant {
 export function Guests () {
   const { tripId } = useParams()
   const [participants, setParticipants] = useState<Participant[]>([])
+  const [isInviteNewGuestModalOpen, setIsInviteNewGuestModalOpen] = useState(false)
+
+  function openInviteNewGuestModal () {
+    setIsInviteNewGuestModalOpen(true)
+  }
+
+  function closeInviteNewGuestModal () {
+    setIsInviteNewGuestModalOpen(false)
+  }
 
   useEffect(() => {
     api.get(`/trips/${tripId}/participants`).then(response => setParticipants(response.data.participants))
@@ -38,10 +48,16 @@ export function Guests () {
           })
         }
       </div>
-      <Button variant='secondary' size='full'>
-        <UserCog className='size-5 text-zinc-200' />
-        Gerenciar Convidados
+      <Button onClick={openInviteNewGuestModal} variant='secondary' size='full'>
+        <UserPlus className='size-5 text-zinc-200' />
+        Adicionar Convidado
       </Button>
+
+      {
+        isInviteNewGuestModalOpen && (
+          <InviteGuestModal handleCloseModal={closeInviteNewGuestModal} />
+        )
+      }
     </div>
   )
 }
