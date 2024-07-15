@@ -14,7 +14,7 @@ interface Props {
 export function InviteGuestModal ({ handleCloseModal }: Props) {
   const { tripId } = useParams()
 
-  async function createActivity (event: FormEvent<HTMLFormElement>) {
+  async function inviteGuest (event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
@@ -32,7 +32,7 @@ export function InviteGuestModal ({ handleCloseModal }: Props) {
       subText='O convidado receberá um e-mail para confirmar a participação na viagem.'
       closeButtonAction={handleCloseModal}
     >
-      <form onSubmit={createActivity} className='space-y-3'>
+      <form onSubmit={inviteGuest} className='space-y-3'>
         <div className='h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2'>
           <AtSign className='size-5 text-zinc-400' />
           <Input type="email" name="email" placeholder="Digite o e-mail do convidado" />
