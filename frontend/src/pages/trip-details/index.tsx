@@ -2,11 +2,11 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
 import { Activities } from './activities'
-import { CreateActivityModal } from './create-activity-modal'
+import { DeleteTrip } from './delete-trip'
 import { DestinationAndDateHeader } from './destination-and-date-header'
 import { Guests } from './guests'
 import { ImportantLinks } from './important-links'
-import { DeleteTrip } from './delete-trip'
+import { CreateActivityModal } from './modals/create-activity-modal'
 
 export function TripDetailsPage () {
   const [isCreateActivityModalOpen, setIsCreateActivityModalOpen] = useState(false)

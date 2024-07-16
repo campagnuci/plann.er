@@ -1,22 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
 import { CheckCircle2, CircleDashed, UserPlus } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { getGuests } from '@/api/get-guests'
 import { Button } from '@/components/button'
-import { api } from '@/lib/axios'
-import { InviteGuestModal } from './invite-guest-modal'
-
-interface Participant {
-  id: string
-  name: string | undefined
-  email: string
-  isConfirmed: boolean
-}
+import { InviteGuestModal } from './modals/invite-guest-modal'
 
 export function Guests () {
   const { tripId } = useParams()
-  const [participants, setParticipants] = useState<Participant[]>([])
   const [isInviteNewGuestModalOpen, setIsInviteNewGuestModalOpen] = useState(false)
+  const { data } = useQuery({
+    queryKey: ['participants'],
+    queryFn: () => getGuests({ tripId: tripId as string }),
+  })
 
   function openInviteNewGuestModal () {
     setIsInviteNewGuestModalOpen(true)
@@ -26,16 +23,12 @@ export function Guests () {
     setIsInviteNewGuestModalOpen(false)
   }
 
-  useEffect(() => {
-    api.get(`/trips/${tripId}/participants`).then(response => setParticipants(response.data.participants))
-  }, [tripId])
-
   return (
     <div className="space-y-6">
       <h2 className="font-semibold text-xl">Convidados</h2>
       <div className="space-y-5">
         {
-          participants && participants.map((participant, index) => {
+          data && data.participants.map((participant, index) => {
             return (
               <div key={participant.id} className="flex items-center justify-between gap-4">
                 <div className="space-y-1.5">

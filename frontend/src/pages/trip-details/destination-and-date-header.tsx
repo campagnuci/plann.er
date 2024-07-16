@@ -1,32 +1,31 @@
+import { useQuery } from '@tanstack/react-query'
 import { isEqual } from 'date-fns'
-import { Calendar, MapPin, Settings2 } from 'lucide-react'
+import { Calendar, HeartCrack, MapPin, Settings2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { DateRange, DayPicker } from 'react-day-picker'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
+import { getTrip } from '@/api/get-trip'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
 import { api } from '@/lib/axios'
 import { mergeDatesToString } from '@/utils/merge-dates-to-string'
 
-export interface Trip {
-  id: string
-  destination: string
-  startsAt: string
-  endsAt: string
-  isConfirmed: boolean
-}
-
 export function DestinationAndDateHeader () {
+  const navigate = useNavigate()
   const { tripId } = useParams()
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-  const [trip, setTrip] = useState<Trip>()
   const [newDestination, setNewDestination] = useState('')
   const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>(undefined)
+  const { isError, data, error } = useQuery({
+    queryKey: ['trip'],
+    queryFn: () => getTrip({ tripId: tripId as string }),
+  })
 
-  const displayedDate = trip ? mergeDatesToString({ from: trip?.startsAt, to: trip?.endsAt }) : null
+  const displayedDate = data ? mergeDatesToString({ from: data?.trip?.startsAt, to: data?.trip?.endsAt }) : null
   const newDisplayedDate = eventStartAndEndDates ? mergeDatesToString(eventStartAndEndDates) : null
 
   function enableDestinationAndDateEditing () {
@@ -42,8 +41,8 @@ export function DestinationAndDateHeader () {
   }
 
   async function editTrip () {
-    const areStartDatesEqual = isEqual(eventStartAndEndDates?.from as Date, trip?.startsAt as string)
-    const areEndDatesEqual = isEqual(eventStartAndEndDates?.to as Date, trip?.endsAt as string)
+    const areStartDatesEqual = isEqual(eventStartAndEndDates?.from as Date, data?.trip?.startsAt as string)
+    const areEndDatesEqual = isEqual(eventStartAndEndDates?.to as Date, data?.trip?.endsAt as string)
     if (newDestination === '' && areStartDatesEqual && areEndDatesEqual) {
       setIsEditing(false)
     }
@@ -63,18 +62,23 @@ export function DestinationAndDateHeader () {
   }
 
   useEffect(() => {
-    async function getTrip () {
-      const { data } = await api.get(`/trips/${tripId}`)
-      setTrip(data.trip)
-    }
-    if (!trip) {
-      getTrip()
-    }
     setEventStartAndEndDates({
-      from: trip && new Date(trip.startsAt),
-      to: trip && new Date(trip.endsAt)
+      from: data && new Date(data.trip?.startsAt),
+      to: data && new Date(data.trip?.endsAt)
     })
-  }, [tripId, trip])
+  }, [data])
+
+  useEffect(() => {
+    if (isError && error) {
+      toast.error('Houve um erro', {
+        description: 'Não conseguimos encontrar a sua viagem. Por favor tente novamente mais tarde.',
+        duration: 5000,
+        icon: <HeartCrack />,
+        closeButton: true
+      })
+      navigate('/')
+    }
+  }, [error, isError, navigate])
 
   return (
     <div className="px-4 h-16 rounded-xl bg-zinc-900 shadow-shape flex items-center justify-between">
@@ -86,7 +90,7 @@ export function DestinationAndDateHeader () {
           type="text"
           textSize='lg'
           extent='xl'
-          value={newDestination.length > 0 ? newDestination : (trip?.destination ?? '')}
+          value={newDestination.length > 0 ? newDestination : (data?.trip?.destination ?? '')}
         />
       </div>
       <div className="flex items-center gap-5">

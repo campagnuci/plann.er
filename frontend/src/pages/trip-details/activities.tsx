@@ -1,31 +1,21 @@
+import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { CircleCheck } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { api } from '@/lib/axios'
+import { getActivities } from '@/api/get-activities'
 import { humanizeWeekDay } from '@/utils/humanize-week-day'
-
-interface Activity {
-  date: string
-  activities: Array<{
-    id: string
-    title: string
-    occursAt: string
-  }>
-}
 
 export function Activities () {
   const { tripId } = useParams()
-  const [activities, setActivities] = useState<Activity[]>([])
-
-  useEffect(() => {
-    api.get(`/trips/${tripId}/activities`).then(response => setActivities(response.data.activities))
-  }, [tripId])
+  const { data } = useQuery({
+    queryKey: ['activities'],
+    queryFn: () => getActivities({ tripId: tripId as string }),
+  })
 
   return (
     <div className="space-y-8">
-      {activities.map((occurrence) => {
+      {data && data.activities.map((occurrence) => {
         return (
           <div key={occurrence.date} className="space-y-2.5">
             <div className="flex gap-2 items-baseline">

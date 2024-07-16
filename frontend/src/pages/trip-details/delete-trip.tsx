@@ -1,21 +1,25 @@
-import { CalendarX2, MapPin } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { CalendarX2, Type } from 'lucide-react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { getTrip } from '@/api/get-trip'
 import { Button } from '@/components/button'
+import { Input } from '@/components/input'
 import { Modal } from '@/components/modal'
 import { api } from '@/lib/axios'
-import { Trip } from './destination-and-date-header'
-import { Input } from '@/components/input'
 
 export function DeleteTrip () {
   const { tripId } = useParams()
   const navigate = useNavigate()
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false)
   const [destinationToRemove, setDestinationToRemove] = useState('')
-  const [trip, setTrip] = useState<Trip>()
+  const { data } = useQuery({
+    queryKey: ['trip'],
+    queryFn: () => getTrip({ tripId: tripId as string }),
+  })
 
-  const doDestinationsMatch = destinationToRemove === trip?.destination
+  const doDestinationsMatch = destinationToRemove === data?.trip.destination
 
   function openConfirmDeleteModal () {
     setIsConfirmDeleteModalOpen(true)
@@ -30,11 +34,6 @@ export function DeleteTrip () {
     navigate('/')
   }
 
-  useEffect(() => {
-    api.get(`/trips/${tripId}`).then(response => setTrip(response.data.trip))
-  }, [tripId])
-
-
   return (
     <div className="space-y-6">
       <Button onClick={openConfirmDeleteModal} variant='danger' size='full'>
@@ -46,12 +45,12 @@ export function DeleteTrip () {
         isConfirmDeleteModalOpen && (
           <Modal
             title='Tem certeza que deseja cancelar a viagem?'
-            subText={`Para confirmar insira o seguinte texto: "${trip?.destination}"`}
+            subText={`Para confirmar insira o seguinte texto: "${data?.trip?.destination}"`}
             closeButtonAction={closeConfirmDeleteModal}
           >
             <div className='space-y-3'>
               <div className='h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2'>
-                <MapPin className='size-5 text-zinc-400' />
+                <Type className='size-5 text-zinc-400' />
                 <Input
                   onChange={(event) => setDestinationToRemove(event.target.value)}
                   type="text"

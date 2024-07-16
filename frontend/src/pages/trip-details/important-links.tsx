@@ -1,22 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link2, Plus } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { getLinks } from '@/api/get-links'
 import { Button } from '@/components/button'
-import { api } from '@/lib/axios'
-import { CreateLinkModal } from './create-link-modal'
-
-interface Link {
-  id: string
-  title: string
-  url: string
-  tripId: string
-}
+import { CreateLinkModal } from './modals/create-link-modal'
 
 export function ImportantLinks () {
   const { tripId } = useParams()
-  const [links, setLinks] = useState<Link[]>([])
   const [isCreateNewLinkModalOpen, setIsCreateNewLinkModalOpen] = useState(false)
+  const { data } = useQuery({
+    queryKey: ['links'],
+    queryFn: () => getLinks({ tripId: tripId as string }),
+  })
 
   function openCreateNewLinkModal () {
     setIsCreateNewLinkModalOpen(true)
@@ -26,17 +23,13 @@ export function ImportantLinks () {
     setIsCreateNewLinkModalOpen(false)
   }
 
-  useEffect(() => {
-    api.get(`/trips/${tripId}/links`).then(response => setLinks(response.data.links))
-  }, [tripId])
-
   return (
     <div className="space-y-6">
       <h2 className="font-semibold text-xl">Links importantes</h2>
       <div className="space-y-5">
-        { links.length === 0 ? <span className='font-medium text-zinc-400'>Ainda não há links cadastrados.</span> : null }
+        { data && data.links.length === 0 ? <span className='font-medium text-zinc-400'>Ainda não há links cadastrados.</span> : null }
         {
-          links && links.map((link) => {
+          data && data.links.map((link) => {
             return (
               <div key={link.id} className="flex items-center justify-between gap-4">
                 <div className="space-y-1.5">
