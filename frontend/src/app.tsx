@@ -1,22 +1,10 @@
 import { QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { RouterProvider } from "react-router-dom"
 import { Toaster } from "sonner"
 
-import { CreateTripPage } from "@/pages/create-trip"
-import { TripDetailsPage } from "@/pages/trip-details"
 import { queryClient } from "./lib/query"
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <CreateTripPage />
-  },
-  {
-    path: '/trip/:tripId',
-    element: <TripDetailsPage />
-  }
-])
+import { router } from "./routes"
 
 export function App() {
   return (
